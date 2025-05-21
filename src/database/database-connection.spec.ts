@@ -14,7 +14,10 @@ describe('Database Connection Test', () => {
     try {
       testingModule = await Test.createTestingModule({
         imports: [
-          ConfigModule.forRoot(),
+          ConfigModule.forRoot({
+            isGlobal: true,
+            envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
+          }),
           MongooseModule.forRootAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
@@ -32,12 +35,20 @@ describe('Database Connection Test', () => {
                 configServiceKeys.MONGODB_PORT,
               );
 
+              const database = configService.get<string>(
+                configServiceKeys.MONGODB_DATABASE,
+              );
+              const authSource =
+                configService.get<string>(
+                  configServiceKeys.MONGODB_AUTH_SOURCE,
+                ) || 'admin';
+
               console.log(
-                `Connecting to MongoDB at mongodb://${username}:${password}@${host}:${port}/`,
+                `Connecting to MongoDB at mongodb://${username}:${password}@${host}:${port}/${database}?authSource=${authSource}`,
               );
 
               return {
-                uri: `mongodb://${username}:${password}@${host}:${port}/`,
+                uri: `mongodb://${username}:${password}@${host}:${port}/${database}?authSource=${authSource}`,
               };
             },
           }),
