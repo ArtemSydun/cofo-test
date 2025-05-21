@@ -1,6 +1,5 @@
 import { Controller, Get, HttpStatus } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Throttle } from '@nestjs/throttler';
 import { DefaultResponse } from 'src/common/interfaces/responses';
 
 @ApiTags('Server')
@@ -8,12 +7,6 @@ import { DefaultResponse } from 'src/common/interfaces/responses';
 export class AppController {
   constructor() {}
 
-  @Throttle({
-    default: {
-      limit: 5,
-      ttl: 60 * 1000,
-    },
-  })
   @Get('status')
   @ApiOperation({
     summary: 'Server live status',

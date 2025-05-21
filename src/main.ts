@@ -13,7 +13,6 @@ async function bootstrap() {
   // setLocal() — setting locals for templates
   // Express native methods under the hood
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.set('trust proxy', 'loopback'); // specify a single subnet
 
   app.useGlobalPipes(new ValidationPipe());
 
@@ -33,11 +32,14 @@ async function bootstrap() {
       .setTitle('NestJS boilerplate')
       .setDescription('NestJS boilerplate')
       .setVersion('1.0')
-      .addBearerAuth({
-        type: 'http',
-        scheme: 'bearer',
-        in: 'header',
-      })
+      .addApiKey(
+        {
+          type: 'apiKey',
+          name: 'X-API-KEY',
+          in: 'header',
+        },
+        'api-key',
+      )
       .build();
     const documentFactory = () => SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('docs', app, documentFactory);
@@ -54,4 +56,5 @@ async function bootstrap() {
 
   logger.log(`Application is running on ${process.env.BACKEND_LINK}`);
 }
+
 bootstrap();

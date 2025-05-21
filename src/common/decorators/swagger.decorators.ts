@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiSecurity } from '@nestjs/swagger';
 import { Errors } from '../enums/errors.enum';
 
 /**
@@ -8,6 +8,10 @@ import { Errors } from '../enums/errors.enum';
  * @param entityName - The name of the entity (e.g., "User")
  * @param property - The property that was not found (e.g., "id", "email")
  */
+
+export function ApiKeyAuth() {
+  return applyDecorators(ApiSecurity('api-key'));
+}
 
 export function ApiCustomNotFoundResponse(
   entityName: string,

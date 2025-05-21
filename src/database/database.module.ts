@@ -3,7 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 // import * as mongoose from 'mongoose';
 import { configServiceKeys } from 'src/common/enums/config.service.enum';
-import { User, UserSchema } from 'src/user/entities/user.entity';
+import { Note, NoteSchema } from 'src/notes/entities/note.entity';
+import { SeederService } from './seeders/note.seeder';
 
 //do not enable db debugging on prod
 // if (process.env.NODE_ENV === 'development') {
@@ -41,10 +42,10 @@ import { User, UserSchema } from 'src/user/entities/user.entity';
         };
       },
     }),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([{ name: Note.name, schema: NoteSchema }]),
   ],
 
-  providers: [],
+  providers: [SeederService],
   exports: [MongooseModule],
 })
 export class DatabaseModule {}
